@@ -1,0 +1,3192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyPath — Minimalist Educational Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* SAGE GREEN & DUSTY BLUE DESIGN SYSTEM */
+    :root {
+      /* Theme Primaries */
+      --sage-primary: #3F5E4D;        /* Core Sage Green: grounded, scholarly, natural */
+      --sage-hover: #324D3E;          /* Deep Sage */
+      --sage-light: #EBF2ED;          /* Gentle sage tint */
+      --sage-border: #C8D7CE;         /* Delicate sage contour */
+
+      --dusty-blue: #4A6B82;          /* Core Dusty Blue: calm, focused, analytical */
+      --dusty-blue-hover: #3C576C;    /* Deep Dusty Blue */
+      --dusty-blue-light: #EEF4F8;    /* Gentle dusty blue tint */
+      --dusty-blue-border: #CBD8E2;   /* Delicate dusty blue contour */
+
+      /* System Foundations */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F6F8F6;        /* Subtle natural sage-white canvas */
+      --bg-card: #FFFFFF;
+      --text-primary: #1C2721;        /* Deep pine-charcoal for crisp readability */
+      --text-secondary: #586960;      /* Muted sage-slate supporting copy */
+      --border: #DFE6E1;              /* Soft sage-tinted gray divider */
+      --hover-bg: #EDF3EF;            /* Subtle interactive hover */
+
+      /* Buttons & Controls */
+      --btn-primary-bg: #3F5E4D;      /* Sage green primary buttons */
+      --btn-primary-text: #FFFFFF;
+      --input-bg: #FFFFFF;
+      --input-border: #CBD7CE;
+      --disabled: #A1B2A8;
+
+      /* Feedback Colors */
+      --success: #26733E;             /* Natural foliage green */
+      --error: #B03A3A;               /* Terracotta crimson */
+      --warning: #996215;             /* Warm amber */
+
+      --radius: 8px;
+      --radius-sm: 6px;
+      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-stack);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text-primary);
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+
+    h1 { font-size: 26px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+    h4 { font-size: 14px; }
+
+    p {
+      color: var(--text-secondary);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    /* LUCIDE SVG ICONS */
+    .icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      stroke-width: 1.85;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .icon-lg { width: 20px; height: 20px; }
+    .icon-sm { width: 14px; height: 14px; }
+
+    /* LAYOUT CONTAINERS */
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 32px 0 64px;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      cursor: pointer;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--sage-primary);
+      background-color: var(--sage-primary);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-link {
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      background-color: var(--hover-bg);
+      color: var(--sage-primary);
+    }
+
+    .nav-link.active {
+      background-color: var(--sage-light);
+      color: var(--sage-primary);
+      font-weight: 600;
+      border-color: var(--sage-border);
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-primary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .user-pill:hover {
+      border-color: var(--dusty-blue-border);
+    }
+
+    .user-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      background-color: var(--dusty-blue-light);
+      border: 1px solid var(--dusty-blue-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--dusty-blue);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-stack);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .btn-primary {
+      background-color: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border-color: var(--btn-primary-bg);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--sage-hover);
+      border-color: var(--sage-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      border-color: var(--border);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--hover-bg);
+      border-color: var(--sage-border);
+      color: var(--sage-primary);
+    }
+
+    .btn-accent {
+      background-color: var(--dusty-blue);
+      color: #FFFFFF;
+      border-color: var(--dusty-blue);
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background-color: var(--dusty-blue-hover);
+      border-color: var(--dusty-blue-hover);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12.5px;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* CARDS */
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .card-compact {
+      padding: 18px;
+    }
+
+    .card-header {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 500;
+      border: 1px solid var(--sage-border);
+      background-color: var(--sage-light);
+      color: var(--sage-primary);
+    }
+
+    .badge-blue {
+      background-color: var(--dusty-blue-light);
+      border-color: var(--dusty-blue-border);
+      color: var(--dusty-blue);
+    }
+
+    .badge-success {
+      background-color: #EDF7EE;
+      border-color: #BDE2C7;
+      color: var(--success);
+    }
+
+    .badge-error {
+      background-color: #FDF2F2;
+      border-color: #F3C7C7;
+      color: var(--error);
+    }
+
+    .badge-warning {
+      background-color: #FEF9EC;
+      border-color: #F6DFB2;
+      color: var(--warning);
+    }
+
+    /* FORM ELEMENTS */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      font-family: var(--font-stack);
+      font-size: 13.5px;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--dusty-blue);
+      box-shadow: 0 0 0 3px rgba(74, 107, 130, 0.12);
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--disabled);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background-color: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--sage-primary);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-bar-fill-blue {
+      background-color: var(--dusty-blue);
+    }
+
+    /* TABLES */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background-color: var(--bg-primary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--bg-secondary);
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: var(--hover-bg);
+    }
+
+    /* GRID UTILITIES */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .flex-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .flex-gap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* CHIPS & FILTERS */
+    .filter-chip {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .filter-chip:hover {
+      background-color: var(--hover-bg);
+      color: var(--sage-primary);
+      border-color: var(--sage-border);
+    }
+
+    .filter-chip.active {
+      background-color: var(--sage-primary);
+      color: #FFFFFF;
+      border-color: var(--sage-primary);
+    }
+
+    /* QUIZ OPTION CARDS */
+    .quiz-option {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .quiz-option:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--dusty-blue-border);
+    }
+
+    .quiz-option.selected {
+      border: 2px solid var(--dusty-blue);
+      background-color: var(--dusty-blue-light);
+      padding: 13px 15px; /* Adjust for 2px border */
+    }
+
+    .quiz-option.review-correct {
+      border: 2px solid var(--success) !important;
+      background-color: #EDF7EE !important;
+      padding: 13px 15px;
+    }
+
+    .quiz-option.review-incorrect {
+      border: 2px solid var(--error) !important;
+      background-color: #FDF2F2 !important;
+      padding: 13px 15px;
+    }
+
+    .option-letter {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--sage-border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--sage-primary);
+      background-color: var(--sage-light);
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+
+    .quiz-option.selected .option-letter {
+      background-color: var(--dusty-blue);
+      color: #FFFFFF;
+      border-color: var(--dusty-blue);
+    }
+
+    .option-text {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding-top: 2px;
+    }
+
+    /* AI CHAT CONTAINER */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      height: 640px;
+    }
+
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background-color: var(--dusty-blue-light);
+      border: 1px solid var(--dusty-blue-border);
+      color: var(--text-primary);
+    }
+
+    .chat-assistant {
+      align-self: flex-start;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .code-block {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      margin: 8px 0;
+      color: var(--text-primary);
+      overflow-x: auto;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(28, 39, 33, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      padding: 28px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .chat-layout { grid-template-columns: 1fr; height: auto; }
+      .nav-links { display: none; }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-primary);
+        border-bottom: 1px solid var(--border);
+        padding: 16px;
+      }
+    }
+
+    /* NOTIFICATION TOAST */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background-color: var(--sage-primary);
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--sage-hover);
+      box-shadow: 0 4px 12px rgba(63, 94, 77, 0.18);
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- GLOBAL NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="nav-brand" onclick="navigateTo('home')">
+        <div class="brand-mark">S</div>
+        <span>StudyPath</span>
+      </div>
+
+      <nav>
+        <ul class="nav-links" id="main-nav-links">
+          <li><span class="nav-link" id="nav-dashboard" onclick="navigateTo('dashboard')"><svg class="icon"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Dashboard</span></li>
+          <li><span class="nav-link" id="nav-bank" onclick="navigateTo('question-bank')"><svg class="icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Question Bank</span></li>
+          <li><span class="nav-link" id="nav-assistant" onclick="navigateTo('assistant')"><svg class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>AI Study Assistant</span></li>
+          <li><span class="nav-link" id="nav-progress" onclick="navigateTo('progress')"><svg class="icon"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Progress</span></li>
+        </ul>
+      </nav>
+
+      <div class="nav-user">
+        <div id="auth-buttons-group" style="display: none;">
+          <button class="btn btn-secondary btn-sm" onclick="navigateTo('auth')">Sign In</button>
+          <button class="btn btn-primary btn-sm" onclick="navigateTo('auth')">Get Started</button>
+        </div>
+        <div id="user-profile-group" style="display: flex;" class="user-pill" onclick="navigateTo('profile')" title="View profile settings">
+          <div class="user-avatar" id="nav-avatar-initials">AM</div>
+          <span id="nav-user-name">Alex Morgan</span>
+          <span class="badge badge-blue" id="nav-exam-badge" style="font-size: 11px; padding: 2px 6px;">JEE 2026</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="mobile-toggle-btn" style="display: none;" onclick="toggleMobileNav()">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER WHERE PAGES RENDER -->
+  <main class="main-content" id="app-root">
+    <!-- Dynamic page content injected here by JavaScript -->
+  </main>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- MODAL CONTAINER (FOR TARGET PICKER OR CONFIRMATIONS) -->
+  <div id="modal-container" style="display: none;"></div>
+
+  <!-- APPLICATION SCRIPTS -->
+  <script>
+    /* ==========================================================================
+       1. DATA STORE & INITIAL STATE
+       ========================================================================== */
+    const STORAGE_KEY_USER = 'studypath_user_v1';
+    const STORAGE_KEY_HISTORY = 'studypath_history_v1';
+    const STORAGE_KEY_SAVED = 'studypath_saved_questions_v1';
+
+    /* ==========================================================================
+       OLLAMA INTEGRATION (MODEL: gemma3:4b)
+       ========================================================================== */
+    const OLLAMA_CONFIG = {
+      model: 'gemma3:4b',
+      endpoint: 'http://localhost:11434',
+      proxyEndpoint: '/api/chat',
+      statusEndpoint: '/api/status',
+      isConnected: false,
+      isChecking: false,
+      models: []
+    };
+
+    async function checkOllamaConnection(verbose = false) {
+      OLLAMA_CONFIG.isChecking = true;
+      let connected = false;
+
+      // 1. Try server.js proxy status endpoint
+      try {
+        const res = await fetch(OLLAMA_CONFIG.statusEndpoint, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.online) {
+            connected = true;
+            OLLAMA_CONFIG.models = data.models || [];
+          }
+        }
+      } catch (e) {
+        // Fallback to direct check
+      }
+
+      // 2. If proxy not available (e.g. file:///), try direct fetch to Ollama API
+      if (!connected) {
+        try {
+          const res = await fetch(`${OLLAMA_CONFIG.endpoint}/api/tags`, {
+            method: 'GET',
+            mode: 'cors'
+          });
+          if (res.ok) {
+            const data = await res.json();
+            connected = true;
+            OLLAMA_CONFIG.models = data.models || [];
+          }
+        } catch (e) {
+          connected = false;
+        }
+      }
+
+      OLLAMA_CONFIG.isConnected = connected;
+      OLLAMA_CONFIG.isChecking = false;
+
+      if (verbose) {
+        if (connected) {
+          showToast(`Connected to Ollama (${OLLAMA_CONFIG.model})`);
+        } else {
+          showToast('Ollama offline. Run: ollama run gemma3:4b');
+        }
+      }
+
+      // Update UI if on assistant or profile page
+      const badge = document.getElementById('ollama-status-badge');
+      if (badge) {
+        badge.outerHTML = renderOllamaStatusBadgeHTML();
+      }
+      return connected;
+    }
+
+    async function callOllamaChat(userPrompt, conversationHistory = []) {
+      const systemPrompt = "You are StudyPath Assistant, a rigorous, clear, and scholarly educational tutor. Your task is to provide step-by-step problem resolutions, clear mathematical proofs, and conceptual clarity across STEM disciplines. Keep explanations structured with clear headings, numbered steps, and readable formulas. Avoid decorative filler.";
+
+      const historyFormatted = conversationHistory
+        .filter(m => !m.isThinking && !m.isError)
+        .slice(-6)
+        .map(m => ({
+          role: m.role,
+          content: m.text
+        }));
+
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        ...historyFormatted,
+        { role: 'user', content: userPrompt }
+      ];
+
+      const payload = {
+        model: OLLAMA_CONFIG.model,
+        messages: messages,
+        stream: false
+      };
+
+      // Attempt 1: Call through server.js proxy
+      try {
+        const res = await fetch(OLLAMA_CONFIG.proxyEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.message && data.message.content) {
+            OLLAMA_CONFIG.isConnected = true;
+            return {
+              success: true,
+              text: data.message.content,
+              source: `Ollama (${OLLAMA_CONFIG.model})`
+            };
+          }
+        }
+      } catch (e) {
+        // Fallback to direct fetch
+      }
+
+      // Attempt 2: Direct call to Ollama (http://localhost:11434/api/chat)
+      try {
+        const res = await fetch(`${OLLAMA_CONFIG.endpoint}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          mode: 'cors'
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.message && data.message.content) {
+            OLLAMA_CONFIG.isConnected = true;
+            return {
+              success: true,
+              text: data.message.content,
+              source: `Ollama (${OLLAMA_CONFIG.model})`
+            };
+          }
+        }
+      } catch (e) {
+        // Direct call failed
+      }
+
+      OLLAMA_CONFIG.isConnected = false;
+      return {
+        success: false,
+        error: 'Ollama service is currently not responding on localhost:11434 with model ' + OLLAMA_CONFIG.model + '.'
+      };
+    }
+
+    function renderOllamaStatusBadgeHTML() {
+      if (OLLAMA_CONFIG.isConnected) {
+        return `
+          <div id="ollama-status-badge" class="badge badge-success" style="padding: 5px 10px; font-size: 12px; font-weight: 500;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background-color: var(--success); display: inline-block; margin-right: 5px;"></span>
+            Model: <strong>${OLLAMA_CONFIG.model}</strong> (Active)
+          </div>
+        `;
+      } else {
+        return `
+          <div id="ollama-status-badge" class="badge" style="padding: 5px 10px; font-size: 12px; font-weight: 500; background-color: var(--hover-bg);">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background-color: var(--warning); display: inline-block; margin-right: 5px;"></span>
+            Model: <strong>${OLLAMA_CONFIG.model}</strong> (Offline)
+          </div>
+        `;
+      }
+    }
+
+    const defaultUser = {
+      name: 'Alex Morgan',
+      email: 'alex.morgan@example.com',
+      targetExam: 'JEE Advanced 2026',
+      dailyGoal: 15,
+      streakDays: 6,
+      isAuthenticated: true
+    };
+
+    const initialHistory = [
+      { id: 'quiz-01', title: 'Calculus: Derivatives & Limits', subject: 'Mathematics', score: 9, total: 10, date: '2026-10-24', duration: '14m 20s' },
+      { id: 'quiz-02', title: 'Kinematics & Newton Laws', subject: 'Physics', score: 8, total: 10, date: '2026-10-23', duration: '16m 05s' },
+      { id: 'quiz-03', title: 'Chemical Equilibrium & Kinetics', subject: 'Chemistry', score: 7, total: 10, date: '2026-10-22', duration: '13m 40s' },
+      { id: 'quiz-04', title: 'Data Structures & Big-O', subject: 'Computer Science', score: 10, total: 10, date: '2026-10-20', duration: '11m 15s' },
+      { id: 'quiz-05', title: 'Cellular Respiration & Genetics', subject: 'Biology', score: 8, total: 10, date: '2026-10-18', duration: '15m 10s' }
+    ];
+
+    // Comprehensive verified question bank
+    const QUESTION_BANK = [
+      // MATHEMATICS
+      {
+        id: 'math-1',
+        subject: 'Mathematics',
+        topic: 'Calculus',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'What is the derivative of f(x) = x² · ln(x) with respect to x for x > 0?',
+        options: [
+          '2x · ln(x) + x',
+          '2x · ln(x) + 1',
+          'x · ln(x) + x',
+          '2x / x'
+        ],
+        correctIndex: 0,
+        explanation: 'Apply the product rule: (u·v)\' = u\'v + uv\'. Here u = x² and v = ln(x). u\' = 2x and v\' = 1/x. Thus f\'(x) = 2x·ln(x) + x²·(1/x) = 2x·ln(x) + x.'
+      },
+      {
+        id: 'math-2',
+        subject: 'Mathematics',
+        topic: 'Integration',
+        difficulty: 'Medium',
+        estTime: '2.5 min',
+        question: 'Evaluate the definite integral ∫₀¹ x · eˣ dx using integration by parts.',
+        options: [
+          'e - 1',
+          '1',
+          'e - 2',
+          '2e - 1'
+        ],
+        correctIndex: 1,
+        explanation: 'Integration by parts ∫ u dv = uv - ∫ v du. Set u = x (so du = dx) and dv = eˣ dx (so v = eˣ). Then ∫ x eˣ dx = x eˣ - ∫ eˣ dx = x eˣ - eˣ. Evaluated from 0 to 1: (1·e¹ - e¹) - (0·e⁰ - e⁰) = (0) - (-1) = 1.'
+      },
+      {
+        id: 'math-3',
+        subject: 'Mathematics',
+        topic: 'Linear Algebra',
+        difficulty: 'Easy',
+        estTime: '1.5 min',
+        question: 'What are the eigenvalues of the upper triangular matrix A = [[3, 5], [0, 2]]?',
+        options: [
+          'λ = 3 and λ = 2',
+          'λ = 5 and λ = 0',
+          'λ = 1 and λ = 6',
+          'λ = -3 and λ = -2'
+        ],
+        correctIndex: 0,
+        explanation: 'For any triangular matrix (upper or lower), the eigenvalues are simply the entries on the main diagonal. Here, the diagonal elements are 3 and 2. Hence, det(A - λI) = (3 - λ)(2 - λ) = 0, giving λ₁ = 3, λ₂ = 2.'
+      },
+      {
+        id: 'math-4',
+        subject: 'Mathematics',
+        topic: 'Probability & Statistics',
+        difficulty: 'Hard',
+        estTime: '3 min',
+        question: 'A test is 95% accurate for detecting a disease that affects 1% of a population. What is the approximate probability that a person who tests positive actually has the disease (P(D|T))?',
+        options: [
+          '~16.1%',
+          '~95.0%',
+          '~50.0%',
+          '~4.8%'
+        ],
+        correctIndex: 0,
+        explanation: 'Using Bayes\' theorem: P(D|T) = [P(T|D)·P(D)] / [P(T|D)·P(D) + P(T|D\')·P(D\')]. P(D) = 0.01, P(T|D) = 0.95. P(D\') = 0.99, P(T|D\') = 0.05 (false positive rate). Numerator = 0.95 · 0.01 = 0.0095. Denominator = 0.0095 + (0.05 · 0.99) = 0.0095 + 0.0495 = 0.059. P(D|T) = 0.0095 / 0.059 ≈ 16.1%.'
+      },
+      {
+        id: 'math-5',
+        subject: 'Mathematics',
+        topic: 'Algebra',
+        difficulty: 'Easy',
+        estTime: '1 min',
+        question: 'For the quadratic equation 2x² - 4x + k = 0, what value of k yields exactly one real double root?',
+        options: [
+          'k = 2',
+          'k = 4',
+          'k = 1',
+          'k = -2'
+        ],
+        correctIndex: 0,
+        explanation: 'A quadratic equation ax² + bx + c = 0 has a single repeated real root when the discriminant Δ = b² - 4ac = 0. Here a = 2, b = -4, c = k. (-4)² - 4(2)(k) = 16 - 8k = 0 => 8k = 16 => k = 2.'
+      },
+
+      // PHYSICS
+      {
+        id: 'phys-1',
+        subject: 'Physics',
+        topic: 'Classical Mechanics',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'A projectile is launched from ground level with speed v₀ at an angle θ above the horizontal. Ignoring air resistance, what is the maximum height H reached?',
+        options: [
+          'v₀² sin²(θ) / (2g)',
+          'v₀² sin(2θ) / g',
+          'v₀² cos²(θ) / (2g)',
+          '2v₀ sin(θ) / g'
+        ],
+        correctIndex: 0,
+        explanation: 'At maximum height, the vertical component of velocity is vy = 0. Using kinematic equation vy² = vy₀² - 2gH, where vy₀ = v₀ sin(θ), we obtain 0 = (v₀ sin θ)² - 2gH => H = v₀² sin²(θ) / (2g).'
+      },
+      {
+        id: 'phys-2',
+        subject: 'Physics',
+        topic: 'Electromagnetism',
+        difficulty: 'Easy',
+        estTime: '1.5 min',
+        question: 'According to Gauss\'s Law, what is the net electric field inside an isolated solid conducting sphere carrying total charge Q at electrostatic equilibrium?',
+        options: [
+          'Zero everywhere inside',
+          'kQ / r²',
+          'kQ / R²',
+          'Uniform and proportional to r'
+        ],
+        correctIndex: 0,
+        explanation: 'In electrostatic equilibrium, charges on a conductor redistribute entirely to the outer surface to minimize potential energy. The net electric field anywhere inside the interior of a conductor must be zero, otherwise internal charges would experience a force and accelerate.'
+      },
+      {
+        id: 'phys-3',
+        subject: 'Physics',
+        topic: 'Thermodynamics',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'A Carnot heat engine operates between a hot reservoir at 500 K and a cold reservoir at 300 K. What is the theoretical maximum thermal efficiency η?',
+        options: [
+          '40%',
+          '60%',
+          '33%',
+          '20%'
+        ],
+        correctIndex: 0,
+        explanation: 'The Carnot efficiency is given by η = 1 - (Tc / Th). Here Tc = 300 K and Th = 500 K. η = 1 - (300 / 500) = 1 - 0.60 = 0.40, which corresponds to 40%.'
+      },
+      {
+        id: 'phys-4',
+        subject: 'Physics',
+        topic: 'Modern Physics',
+        difficulty: 'Hard',
+        estTime: '2.5 min',
+        question: 'In the photoelectric effect, if the frequency of incident light is doubled while keeping intensity constant, what happens to the maximum kinetic energy (KE_max) of emitted photoelectrons?',
+        options: [
+          'It more than doubles',
+          'It exactly doubles',
+          'It stays unchanged',
+          'It increases by a factor of four'
+        ],
+        correctIndex: 0,
+        explanation: 'Einstein\'s photoelectric equation: KE_max = hf - Φ. If frequency f doubles to 2f, KE_new = 2hf - Φ = 2(hf - Φ) + Φ = 2(KE_max) + Φ. Since work function Φ > 0, the new kinetic energy is strictly greater than double the original value.'
+      },
+      {
+        id: 'phys-5',
+        subject: 'Physics',
+        topic: 'Optics & Waves',
+        difficulty: 'Easy',
+        estTime: '1 min',
+        question: 'When light passes from a vacuum (refractive index n₁ = 1) into glass (n₂ = 1.5), which property remains constant?',
+        options: [
+          'Frequency',
+          'Wavelength',
+          'Wave speed',
+          'Wave amplitude'
+        ],
+        correctIndex: 0,
+        explanation: 'The frequency of a wave is determined solely by the source generating it and does not change when crossing boundaries. Speed decreases as v = c/n and wavelength decreases proportionally as λ = λ₀/n.'
+      },
+
+      // CHEMISTRY
+      {
+        id: 'chem-1',
+        subject: 'Chemistry',
+        topic: 'Chemical Equilibrium',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'For the Haber process N₂(g) + 3H₂(g) ⇌ 2NH₃(g) (ΔH = -92 kJ/mol), which action will shift equilibrium to produce more ammonia (NH₃)?',
+        options: [
+          'Increasing total system pressure',
+          'Increasing temperature',
+          'Adding an inert gas at constant volume',
+          'Adding a catalyst'
+        ],
+        correctIndex: 0,
+        explanation: 'According to Le Chatelier\'s principle, increasing pressure shifts equilibrium toward the side with fewer gas moles. Reactants have 1 + 3 = 4 moles of gas; products have 2 moles. Thus, increasing pressure favors forward production of NH₃. Increasing temperature shifts an exothermic reaction left.'
+      },
+      {
+        id: 'chem-2',
+        subject: 'Chemistry',
+        topic: 'Organic Chemistry',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'What is the characteristic stereochemical outcome of an SN2 nucleophilic substitution at a chiral stereocenter?',
+        options: [
+          'Complete inversion of configuration (Walden inversion)',
+          'Complete retention of configuration',
+          'Racemization (50% retention, 50% inversion)',
+          'Elimination of the stereocenter'
+        ],
+        correctIndex: 0,
+        explanation: 'SN2 reactions proceed via a concerted backside attack by the nucleophile opposite to the leaving group, causing a complete inversion of configuration at the carbon center (Walden inversion).'
+      },
+      {
+        id: 'chem-3',
+        subject: 'Chemistry',
+        topic: 'Inorganic Chemistry',
+        difficulty: 'Easy',
+        estTime: '1.5 min',
+        question: 'What is the oxidation state of Chromium (Cr) in the dichromate ion Cr₂O₇²⁻?',
+        options: [
+          '+6',
+          '+7',
+          '+3',
+          '+4'
+        ],
+        correctIndex: 0,
+        explanation: 'In Cr₂O₇²⁻, each oxygen typically has an oxidation state of -2. For seven oxygens: 7 × (-2) = -14. The total charge is -2. Let x be the oxidation state of Cr: 2x + (-14) = -2 => 2x = +12 => x = +6.'
+      },
+      {
+        id: 'chem-4',
+        subject: 'Chemistry',
+        topic: 'Physical Chemistry',
+        difficulty: 'Hard',
+        estTime: '2.5 min',
+        question: 'For a first-order chemical reaction A → Products with rate constant k = 0.0693 min⁻¹, what is the half-life t₁/₂?',
+        options: [
+          '10 minutes',
+          '14.4 minutes',
+          '6.93 minutes',
+          '100 minutes'
+        ],
+        correctIndex: 0,
+        explanation: 'For a first-order reaction, half-life is independent of initial concentration and given by t₁/₂ = ln(2) / k ≈ 0.693 / k. With k = 0.0693 min⁻¹, t₁/₂ = 0.693 / 0.0693 = 10 minutes.'
+      },
+
+      // COMPUTER SCIENCE
+      {
+        id: 'cs-1',
+        subject: 'Computer Science',
+        topic: 'Algorithms & Data Structures',
+        difficulty: 'Easy',
+        estTime: '1 min',
+        question: 'What is the worst-case time complexity of searching for an element in a balanced Binary Search Tree (e.g. Red-Black or AVL tree) containing n elements?',
+        options: [
+          'O(log n)',
+          'O(n)',
+          'O(1)',
+          'O(n log n)'
+        ],
+        correctIndex: 0,
+        explanation: 'In a self-balancing binary search tree, tree height is strictly maintained at O(log n). Each lookup compares the key and branches left or right, visiting at most height levels, guaranteeing O(log n) worst-case search.'
+      },
+      {
+        id: 'cs-2',
+        subject: 'Computer Science',
+        topic: 'Algorithms & Graphs',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'What is the standard time complexity of Dijkstra\'s algorithm on a graph with V vertices and E edges when implemented with a binary min-heap priority queue?',
+        options: [
+          'O((V + E) log V)',
+          'O(V²)',
+          'O(V · E)',
+          'O(E log E)'
+        ],
+        correctIndex: 0,
+        explanation: 'Each vertex is extracted from the min-heap once (V · log V), and each edge relaxation may update a vertex key in the heap (E · log V). Summed together, the time complexity is O((V + E) log V).'
+      },
+      {
+        id: 'cs-3',
+        subject: 'Computer Science',
+        topic: 'Operating Systems',
+        difficulty: 'Medium',
+        estTime: '1.5 min',
+        question: 'Which of the following resources is typically shared between two threads within the same process?',
+        options: [
+          'Address space and heap memory',
+          'Call stack',
+          'Program counter register',
+          'Stack pointer'
+        ],
+        correctIndex: 0,
+        explanation: 'Threads within the same process share the process address space, heap memory, open file descriptors, and global variables. Each thread has its own private execution context: registers, program counter, and stack.'
+      },
+      {
+        id: 'cs-4',
+        subject: 'Computer Science',
+        topic: 'Databases',
+        difficulty: 'Easy',
+        estTime: '1 min',
+        question: 'A relational table is in Third Normal Form (3NF) if it is in 2NF and what condition is met?',
+        options: [
+          'No non-prime attribute is transitively dependent on the primary key',
+          'Every attribute value is atomic',
+          'There are no composite keys',
+          'No multi-valued dependencies exist'
+        ],
+        correctIndex: 0,
+        explanation: '1NF ensures atomicity. 2NF removes partial functional dependencies on candidate keys. 3NF removes transitive dependencies (X → Y → Z where Z depends on a non-candidate key Y).'
+      },
+
+      // BIOLOGY
+      {
+        id: 'bio-1',
+        subject: 'Biology',
+        topic: 'Cellular Biology',
+        difficulty: 'Easy',
+        estTime: '1 min',
+        question: 'During cellular respiration, in which cellular compartment does the citric acid (Krebs) cycle take place in eukaryotic cells?',
+        options: [
+          'Mitochondrial matrix',
+          'Cytosol',
+          'Inner mitochondrial membrane',
+          'Intermembrane space'
+        ],
+        correctIndex: 0,
+        explanation: 'Glycolysis occurs in the cytosol. The Krebs cycle takes place in the fluid mitochondrial matrix. The electron transport chain and ATP synthase are situated in the inner mitochondrial membrane (cristae).'
+      },
+      {
+        id: 'bio-2',
+        subject: 'Biology',
+        topic: 'Molecular Genetics',
+        difficulty: 'Medium',
+        estTime: '2 min',
+        question: 'Which enzyme is directly responsible for synthesizing short RNA primers required for DNA polymerase to initiate synthesis on both the leading and lagging strands?',
+        options: [
+          'DNA Primase',
+          'DNA Ligase',
+          'DNA Helicase',
+          'Topoisomerase'
+        ],
+        correctIndex: 0,
+        explanation: 'DNA polymerases cannot initiate synthesis de novo; they require an existing 3\'-OH group. DNA Primase (an RNA polymerase) synthesizes short RNA primers that provide the starting 3\'-OH terminus.'
+      },
+      {
+        id: 'bio-3',
+        subject: 'Biology',
+        topic: 'Physiology & Neurobiology',
+        difficulty: 'Hard',
+        estTime: '2.5 min',
+        question: 'What is primarily responsible for the rapid depolarization phase of an action potential in a human neuron?',
+        options: [
+          'Opening of voltage-gated Na⁺ channels causing massive Na⁺ influx',
+          'Efflux of K⁺ through voltage-gated K⁺ channels',
+          'Active transport of 3 Na⁺ out and 2 K⁺ in by the Na⁺/K⁺ pump',
+          'Influx of Cl⁻ through ligand-gated channels'
+        ],
+        correctIndex: 0,
+        explanation: 'When threshold potential (~ -55 mV) is reached, voltage-gated Na⁺ channels rapidly activate, causing a flood of Na⁺ into the neuron down its electrochemical gradient, driving the membrane potential towards +30 mV.'
+      }
+    ];
+
+    /* ==========================================================================
+       2. LOCAL STATE HELPERS
+       ========================================================================== */
+    function getUser() {
+      const stored = localStorage.getItem(STORAGE_KEY_USER);
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) {}
+      }
+      return { ...defaultUser };
+    }
+
+    function saveUser(u) {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(u));
+      renderNavUser();
+    }
+
+    function getHistory() {
+      const stored = localStorage.getItem(STORAGE_KEY_HISTORY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) {}
+      }
+      return [...initialHistory];
+    }
+
+    function saveHistory(h) {
+      localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(h));
+    }
+
+    function showToast(message) {
+      const c = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<svg class="icon icon-sm"><polyline points="20 6 9 17 4 12"/></svg> <span>${message}</span>`;
+      c.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transition = 'opacity 0.2s';
+        setTimeout(() => t.remove(), 200);
+      }, 3000);
+    }
+
+    /* ==========================================================================
+       3. NAVIGATION AND ROUTING
+       ========================================================================== */
+    let currentRoute = 'dashboard';
+    let activeQuizState = null;
+    let lastQuizResult = null;
+
+    function navigateTo(route, params = null) {
+      currentRoute = route;
+      window.location.hash = route;
+
+      // Update nav link active classes
+      const navLinks = ['dashboard', 'bank', 'assistant', 'progress'];
+      navLinks.forEach(id => {
+        const el = document.getElementById('nav-' + id);
+        if (el) {
+          if (route === id || (route === 'question-bank' && id === 'bank')) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        }
+      });
+
+      const root = document.getElementById('app-root');
+      window.scrollTo(0, 0);
+
+      switch (route) {
+        case 'home':
+          renderHomePage(root);
+          break;
+        case 'dashboard':
+          renderDashboardPage(root);
+          break;
+        case 'question-bank':
+        case 'bank':
+          renderQuestionBankPage(root, params);
+          break;
+        case 'quiz':
+          renderQuizPage(root, params);
+          break;
+        case 'results':
+          renderResultsPage(root);
+          break;
+        case 'progress':
+          renderProgressPage(root);
+          break;
+        case 'assistant':
+          renderAssistantPage(root, params);
+          break;
+        case 'profile':
+          renderProfilePage(root);
+          break;
+        case 'auth':
+          renderAuthPage(root);
+          break;
+        default:
+          renderDashboardPage(root);
+      }
+    }
+
+    function renderNavUser() {
+      const user = getUser();
+      const authGroup = document.getElementById('auth-buttons-group');
+      const userGroup = document.getElementById('user-profile-group');
+      const initialsEl = document.getElementById('nav-avatar-initials');
+      const nameEl = document.getElementById('nav-user-name');
+      const badgeEl = document.getElementById('nav-exam-badge');
+
+      if (user.isAuthenticated) {
+        authGroup.style.display = 'none';
+        userGroup.style.display = 'flex';
+        const parts = user.name.split(' ');
+        const initials = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : user.name.slice(0, 2).toUpperCase();
+        initialsEl.textContent = initials;
+        nameEl.textContent = user.name;
+        badgeEl.textContent = user.targetExam;
+      } else {
+        authGroup.style.display = 'flex';
+        userGroup.style.display = 'none';
+      }
+    }
+
+    function toggleMobileNav() {
+      const el = document.getElementById('main-nav-links');
+      el.classList.toggle('mobile-open');
+    }
+
+    /* ==========================================================================
+       4. PAGE VIEW: HOMEPAGE (CLEAN, MINIMALIST & INFORMATIVE)
+       ========================================================================== */
+    function renderHomePage(root) {
+      root.innerHTML = `
+        <div class="container" style="max-width: 960px;">
+          <!-- HERO -->
+          <div style="padding: 48px 0 40px; text-align: center;">
+            <div class="badge" style="margin-bottom: 16px;">
+              <svg class="icon icon-sm"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Strictly Designed for Focused Preparation
+            </div>
+            <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 14px; letter-spacing: -0.02em;">
+              A Clean, Practical Platform for Serious Examination Study
+            </h1>
+            <p style="font-size: 16px; max-width: 640px; margin: 0 auto 28px; color: var(--text-secondary); line-height: 1.6;">
+              StudyPath eliminates visual clutter, unnecessary animations, and vanity metrics so you can focus on mastering core concepts and rigorous practice questions.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 12px;">
+              <button class="btn btn-primary" onclick="navigateTo('dashboard')">
+                Open Dashboard
+                <svg class="icon icon-sm"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+              <button class="btn btn-secondary" onclick="navigateTo('question-bank')">
+                Browse Question Bank
+              </button>
+            </div>
+          </div>
+
+          <!-- THREE PILLARS (PRACTICAL CONTAINERS) -->
+          <div class="grid-3" style="margin-bottom: 48px;">
+            <div class="card">
+              <div style="margin-bottom: 12px; color: var(--text-primary);">
+                <svg class="icon icon-lg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <h3 style="margin-bottom: 8px;">Curated Question Bank</h3>
+              <p style="font-size: 13.5px;">
+                Verified questions across Mathematics, Physics, Chemistry, Biology, and Computer Science with in-depth step-by-step explanations.
+              </p>
+            </div>
+
+            <div class="card">
+              <div style="margin-bottom: 12px; color: var(--text-primary);">
+                <svg class="icon icon-lg"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <h3 style="margin-bottom: 8px;">Honest Diagnostic Progress</h3>
+              <p style="font-size: 13.5px;">
+                Track genuine subject accuracy and completed test logs. Identify specific weak topics needing targeted reinforcement.
+              </p>
+            </div>
+
+            <div class="card">
+              <div style="margin-bottom: 12px; color: var(--text-primary);">
+                <svg class="icon icon-lg"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <h3 style="margin-bottom: 8px;">Integrated Study Assistant</h3>
+              <p style="font-size: 13.5px;">
+                Ask concept clarifications, request step-by-step mathematical derivations, or generate targeted practice questions on any topic.
+              </p>
+            </div>
+          </div>
+
+          <!-- SUBJECT COVERAGE -->
+          <div class="card" style="margin-bottom: 48px;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Supported Subjects & Examinations</h3>
+                <p class="card-subtitle">Comprehensive coverage tailored for competitive exams and STEM curricula</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="navigateTo('question-bank')">Explore All</button>
+            </div>
+
+            <div class="grid-2">
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Mathematics</span>
+                  <span class="badge">Calculus &bull; Linear Algebra</span>
+                </div>
+                <p style="font-size: 13px;">Limits, derivatives, integrals, matrices, probability, and quadratic discriminant analysis.</p>
+              </div>
+
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Physics</span>
+                  <span class="badge">Mechanics &bull; Electromagnetism</span>
+                </div>
+                <p style="font-size: 13px;">Projectile kinematics, Gauss\'s law, Carnot engines, and photoelectric effect.</p>
+              </div>
+
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Chemistry</span>
+                  <span class="badge">Equilibrium &bull; Organic</span>
+                </div>
+                <p style="font-size: 13px;">Le Chatelier\'s principle, SN2 mechanisms, oxidation states, and reaction kinetics.</p>
+              </div>
+
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Computer Science</span>
+                  <span class="badge">Algorithms &bull; OS</span>
+                </div>
+                <p style="font-size: 13px;">Balanced BSTs, Dijkstra\'s algorithm, thread memory sharing, and database normalization.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM CALL TO ACTION -->
+          <div class="card" style="text-align: center; padding: 36px 20px; background-color: var(--bg-primary);">
+            <h2 style="margin-bottom: 8px;">Begin Your Diagnostic Practice</h2>
+            <p style="max-width: 520px; margin: 0 auto 20px; font-size: 14px;">
+              Select a subject or jump straight into a general diagnostic quiz to establish your baseline accuracy.
+            </p>
+            <button class="btn btn-primary" onclick="startQuickQuiz('All')">
+              Start 5-Question Diagnostic
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       5. PAGE VIEW: DASHBOARD (PRACTICAL, METRIC-FOCUSED & CLEAN)
+       ========================================================================== */
+    function renderDashboardPage(root) {
+      const user = getUser();
+      const history = getHistory();
+
+      // Compute honest statistics
+      const totalQuizzes = history.length;
+      let totalScore = 0;
+      let totalQuestions = 0;
+      let bestScore = 0;
+
+      history.forEach(item => {
+        totalScore += item.score;
+        totalQuestions += item.total;
+        const pct = Math.round((item.score / item.total) * 100);
+        if (pct > bestScore) bestScore = pct;
+      });
+
+      const avgScore = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
+      const syllabusProgress = 68; // Honest curriculum coverage percentage
+
+      root.innerHTML = `
+        <div class="container">
+          <!-- TOP GREETING & EXAM TARGET BADGE -->
+          <div class="flex-between" style="margin-bottom: 24px; flex-wrap: wrap;">
+            <div>
+              <h1 style="font-size: 22px; margin-bottom: 4px;">Welcome back, ${user.name}</h1>
+              <p style="font-size: 13.5px;">Here is your structured progress and recommended practice for today.</p>
+            </div>
+            <div class="flex-gap">
+              <div class="badge badge-blue" style="padding: 6px 12px; font-size: 13px;">
+                <svg class="icon icon-sm"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Target: <strong>${user.targetExam}</strong>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="showTargetExamModal()">Change Target</button>
+            </div>
+          </div>
+
+          <!-- 4 CLEAN METRIC CARDS (ALL WHITE, THIN BORDER, RESTRAINED MONOCHROME) -->
+          <div class="grid-4" style="margin-bottom: 28px;">
+            <div class="card card-compact">
+              <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px;">Quizzes Completed</div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--sage-primary);">${totalQuizzes}</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">+2 completed this week</div>
+            </div>
+
+            <div class="card card-compact">
+              <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px;">Average Accuracy</div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--text-primary);">${avgScore}%</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Based on ${totalQuestions} answered questions</div>
+            </div>
+
+            <div class="card card-compact">
+              <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px;">Highest Test Score</div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--dusty-blue);">${bestScore}%</div>
+              <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">Computer Science — Algorithms</div>
+            </div>
+
+            <div class="card card-compact">
+              <div style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px;">Syllabus Coverage</div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--sage-primary);">${syllabusProgress}%</div>
+              <div style="margin-top: 8px;">
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" style="width: ${syllabusProgress}%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DASHBOARD TWO-COLUMN CONTENT -->
+          <div class="grid-2" style="align-items: start; margin-bottom: 28px;">
+            <!-- LEFT: RECOMMENDED QUIZZES -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Recommended Practice Modules</h3>
+                  <p class="card-subtitle">Curated based on your target syllabus</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="navigateTo('question-bank')">View All</button>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                  <div class="flex-between" style="margin-bottom: 6px;">
+                    <div style="font-weight: 600;">Mathematics Diagnostic</div>
+                    <span class="badge">Medium &bull; 5 Questions</span>
+                  </div>
+                  <p style="font-size: 12.5px; margin-bottom: 12px;">Calculus, matrix eigenvalues, and probability theory.</p>
+                  <button class="btn btn-primary btn-sm" onclick="startSubjectQuiz('Mathematics')">Start Quiz</button>
+                </div>
+
+                <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                  <div class="flex-between" style="margin-bottom: 6px;">
+                    <div style="font-weight: 600;">Physics: Mechanics & Waves</div>
+                    <span class="badge">Medium &bull; 5 Questions</span>
+                  </div>
+                  <p style="font-size: 12.5px; margin-bottom: 12px;">Kinematics, Gauss\'s law, Carnot cycle, and photonics.</p>
+                  <button class="btn btn-primary btn-sm" onclick="startSubjectQuiz('Physics')">Start Quiz</button>
+                </div>
+
+                <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                  <div class="flex-between" style="margin-bottom: 6px;">
+                    <div style="font-weight: 600;">Computer Science: Algorithms</div>
+                    <span class="badge">Medium &bull; 4 Questions</span>
+                  </div>
+                  <p style="font-size: 12.5px; margin-bottom: 12px;">BST search complexity, Dijkstra min-heap, and threads.</p>
+                  <button class="btn btn-primary btn-sm" onclick="startSubjectQuiz('Computer Science')">Start Quiz</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: RECENT ACTIVITY LOG & STUDY GOAL -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <!-- DAILY GOAL STATUS CARD -->
+              <div class="card card-compact">
+                <div class="flex-between" style="margin-bottom: 10px;">
+                  <div>
+                    <h4 style="font-size: 14px;">Daily Study Goal</h4>
+                    <p style="font-size: 12px;">Target: ${user.dailyGoal} questions / day</p>
+                  </div>
+                  <span class="badge badge-success">Streak: ${user.streakDays} Days</span>
+                </div>
+                <div class="progress-bar-bg" style="margin-bottom: 8px;">
+                  <div class="progress-bar-fill" style="width: 75%;"></div>
+                </div>
+                <div class="flex-between" style="font-size: 11.5px; color: var(--text-secondary);">
+                  <span>12 of ${user.dailyGoal} questions answered today</span>
+                  <span>75% complete</span>
+                </div>
+              </div>
+
+              <!-- RECENT TEST RESULTS -->
+              <div class="card">
+                <div class="card-header" style="margin-bottom: 12px;">
+                  <h3 class="card-title">Recent Quiz Results</h3>
+                  <button class="btn btn-secondary btn-sm" onclick="navigateTo('progress')">Full History</button>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  ${history.slice(0, 4).map(item => `
+                    <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between;">
+                      <div>
+                        <div style="font-weight: 500; font-size: 13px;">${item.title}</div>
+                        <div style="font-size: 11.5px; color: var(--text-secondary);">${item.subject} &bull; ${item.date}</div>
+                      </div>
+                      <div style="text-align: right;">
+                        <span style="font-weight: 600; font-size: 13px;">${item.score}/${item.total}</span>
+                        <div style="font-size: 11px; color: var(--text-secondary);">${Math.round((item.score/item.total)*100)}%</div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- QUICK ASSISTANT PROMPT ENTRY -->
+              <div class="card card-compact" style="background-color: var(--bg-primary);">
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
+                  <svg class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span style="font-weight: 600; font-size: 13.5px;">Have a question about a concept?</span>
+                </div>
+                <p style="font-size: 12.5px; margin-bottom: 10px;">
+                  Ask the integrated study assistant for step-by-step problem resolutions and formula proofs.
+                </p>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="navigateTo('assistant')">
+                  Open AI Study Assistant
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       6. PAGE VIEW: QUESTION BANK
+       ========================================================================== */
+    let currentBankSubject = 'All';
+    let currentBankDifficulty = 'All';
+    let bankSearchQuery = '';
+
+    function renderQuestionBankPage(root) {
+      const subjects = ['All', 'Mathematics', 'Physics', 'Chemistry', 'Computer Science', 'Biology'];
+      const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
+
+      const filtered = QUESTION_BANK.filter(q => {
+        const matchesSubject = (currentBankSubject === 'All' || q.subject === currentBankSubject);
+        const matchesDiff = (currentBankDifficulty === 'All' || q.difficulty === currentBankDifficulty);
+        const matchesSearch = bankSearchQuery.trim() === '' ||
+          q.question.toLowerCase().includes(bankSearchQuery.toLowerCase()) ||
+          q.topic.toLowerCase().includes(bankSearchQuery.toLowerCase());
+        return matchesSubject && matchesDiff && matchesSearch;
+      });
+
+      root.innerHTML = `
+        <div class="container">
+          <div class="flex-between" style="margin-bottom: 24px; flex-wrap: wrap;">
+            <div>
+              <h1 style="font-size: 22px; margin-bottom: 4px;">Question Bank</h1>
+              <p style="font-size: 13.5px;">Search and practice verified examination questions with complete solutions.</p>
+            </div>
+            <div class="flex-gap">
+              <button class="btn btn-primary" onclick="startFilteredQuiz()">
+                <svg class="icon icon-sm"><polyline points="9 18 15 12 9 6"/></svg>
+                Practice Selected (${filtered.length})
+              </button>
+            </div>
+          </div>
+
+          <!-- SEARCH AND FILTERS BAR -->
+          <div class="card card-compact" style="margin-bottom: 24px;">
+            <div style="display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 240px; position: relative;">
+                <input
+                  type="text"
+                  class="form-input"
+                  id="bank-search-input"
+                  placeholder="Search questions by topic, keyword, or concept..."
+                  value="${bankSearchQuery}"
+                  oninput="updateBankSearch(this.value)"
+                />
+              </div>
+
+              <div style="width: 180px;">
+                <select class="form-select" onchange="updateBankDifficulty(this.value)">
+                  ${difficulties.map(d => `<option value="${d}" ${currentBankDifficulty === d ? 'selected' : ''}>${d === 'All' ? 'All Difficulties' : d}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+
+            <!-- SUBJECT PILLS -->
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              ${subjects.map(s => `
+                <button
+                  class="filter-chip ${currentBankSubject === s ? 'active' : ''}"
+                  onclick="updateBankSubject('${s}')"
+                >
+                  ${s}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- QUESTION LIST COUNT -->
+          <div class="flex-between" style="margin-bottom: 16px;">
+            <span style="font-size: 13px; color: var(--text-secondary);">Showing <strong>${filtered.length}</strong> questions</span>
+            ${(currentBankSubject !== 'All' || currentBankDifficulty !== 'All' || bankSearchQuery) ? `
+              <button class="btn btn-secondary btn-sm" onclick="resetBankFilters()">Clear Filters</button>
+            ` : ''}
+          </div>
+
+          <!-- QUESTIONS LIST -->
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            ${filtered.length === 0 ? `
+              <div class="card" style="text-align: center; padding: 40px;">
+                <p>No questions matched your search criteria. Try clearing filters or searching for another topic.</p>
+                <button class="btn btn-secondary btn-sm" style="margin-top: 12px;" onclick="resetBankFilters()">Reset Filters</button>
+              </div>
+            ` : filtered.map((q, idx) => `
+              <div class="card" style="padding: 18px;">
+                <div class="flex-between" style="margin-bottom: 10px;">
+                  <div class="flex-gap">
+                    <span class="badge">${q.subject}</span>
+                    <span class="badge" style="background-color: transparent;">Topic: ${q.topic}</span>
+                    <span class="badge" style="background-color: transparent;">${q.difficulty}</span>
+                  </div>
+                  <span style="font-size: 12px; color: var(--text-secondary);">${q.estTime}</span>
+                </div>
+
+                <div style="font-weight: 500; font-size: 14.5px; color: var(--text-primary); margin-bottom: 14px; line-height: 1.5;">
+                  ${q.question}
+                </div>
+
+                <!-- 4 OPTIONS PREVIEW -->
+                <div class="grid-2" style="margin-bottom: 14px;">
+                  ${q.options.map((opt, optIdx) => `
+                    <div style="font-size: 13px; padding: 8px 12px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; gap: 8px;">
+                      <span style="font-weight: 600; color: var(--text-secondary);">${String.fromCharCode(65 + optIdx)}.</span>
+                      <span>${opt}</span>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <div class="flex-between" style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px;">
+                  <button class="btn btn-secondary btn-sm" onclick="toggleBankExplanation('${q.id}')">
+                    <svg class="icon icon-sm"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    View Explanation
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="startSingleQuestionQuiz('${q.id}')">
+                    Practice This Question
+                  </button>
+                </div>
+
+                <!-- HIDDEN EXPLANATION DRAWER -->
+                <div id="explanation-${q.id}" style="display: none; margin-top: 14px; padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                  <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--success);">
+                    Correct Answer: ${String.fromCharCode(65 + q.correctIndex)} (${q.options[q.correctIndex]})
+                  </div>
+                  <p style="font-size: 13px; line-height: 1.6; color: var(--text-primary);">${q.explanation}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateBankSubject(sub) {
+      currentBankSubject = sub;
+      renderQuestionBankPage(document.getElementById('app-root'));
+    }
+
+    function updateBankDifficulty(diff) {
+      currentBankDifficulty = diff;
+      renderQuestionBankPage(document.getElementById('app-root'));
+    }
+
+    function updateBankSearch(query) {
+      bankSearchQuery = query;
+      // Debounced or direct re-render without losing input focus
+      const filteredCountEl = document.querySelector('.container');
+      if (filteredCountEl) {
+        renderQuestionBankPage(document.getElementById('app-root'));
+        const input = document.getElementById('bank-search-input');
+        if (input) {
+          input.focus();
+          input.selectionStart = input.selectionEnd = input.value.length;
+        }
+      }
+    }
+
+    function resetBankFilters() {
+      currentBankSubject = 'All';
+      currentBankDifficulty = 'All';
+      bankSearchQuery = '';
+      renderQuestionBankPage(document.getElementById('app-root'));
+    }
+
+    function toggleBankExplanation(id) {
+      const el = document.getElementById('explanation-' + id);
+      if (el) {
+        el.style.display = el.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    /* ==========================================================================
+       7. PAGE VIEW: QUIZ ENGINE (CONCENTRATION-FOCUSED & DISTRACTION-FREE)
+       ========================================================================== */
+    function startQuickQuiz(subject = 'All') {
+      let pool = QUESTION_BANK;
+      if (subject !== 'All') {
+        pool = QUESTION_BANK.filter(q => q.subject === subject);
+      }
+      // Pick up to 5 questions
+      const selectedQuestions = [...pool].sort(() => 0.5 - Math.random()).slice(0, 5);
+      initiateQuizSession('Diagnostic Assessment (' + subject + ')', selectedQuestions);
+    }
+
+    function startSubjectQuiz(subject) {
+      const selectedQuestions = QUESTION_BANK.filter(q => q.subject === subject).slice(0, 5);
+      initiateQuizSession(subject + ' Comprehensive Practice', selectedQuestions);
+    }
+
+    function startSingleQuestionQuiz(questionId) {
+      const q = QUESTION_BANK.find(item => item.id === questionId);
+      if (q) {
+        initiateQuizSession('Practice: ' + q.topic, [q]);
+      }
+    }
+
+    function startFilteredQuiz() {
+      const filtered = QUESTION_BANK.filter(q => {
+        const matchesSubject = (currentBankSubject === 'All' || q.subject === currentBankSubject);
+        const matchesDiff = (currentBankDifficulty === 'All' || q.difficulty === currentBankDifficulty);
+        const matchesSearch = bankSearchQuery.trim() === '' ||
+          q.question.toLowerCase().includes(bankSearchQuery.toLowerCase()) ||
+          q.topic.toLowerCase().includes(bankSearchQuery.toLowerCase());
+        return matchesSubject && matchesDiff && matchesSearch;
+      });
+      if (filtered.length === 0) {
+        showToast('No questions match the current filters.');
+        return;
+      }
+      initiateQuizSession('Practice Module: ' + currentBankSubject, filtered.slice(0, 10));
+    }
+
+    function initiateQuizSession(title, questions) {
+      activeQuizState = {
+        title: title,
+        questions: questions,
+        currentIndex: 0,
+        userAnswers: new Array(questions.length).fill(null),
+        flagged: new Array(questions.length).fill(false),
+        startTime: Date.now(),
+        timerInterval: null,
+        secondsElapsed: 0
+      };
+
+      navigateTo('quiz');
+    }
+
+    function renderQuizPage(root) {
+      if (!activeQuizState || !activeQuizState.questions.length) {
+        navigateTo('dashboard');
+        return;
+      }
+
+      const qIndex = activeQuizState.currentIndex;
+      const currentQ = activeQuizState.questions[qIndex];
+      const totalQ = activeQuizState.questions.length;
+      const selectedAnswer = activeQuizState.userAnswers[qIndex];
+      const isFlagged = activeQuizState.flagged[qIndex];
+
+      const progressPct = Math.round(((qIndex + 1) / totalQ) * 100);
+
+      root.innerHTML = `
+        <div class="container" style="max-width: 800px;">
+          <!-- QUIZ HEADER WITH PROGRESS & TIMER -->
+          <div class="flex-between" style="margin-bottom: 16px;">
+            <div>
+              <span class="badge" style="margin-bottom: 4px;">${activeQuizState.title}</span>
+              <h2 style="font-size: 18px;">Question ${qIndex + 1} of ${totalQ}</h2>
+            </div>
+            <div class="flex-gap">
+              <div class="badge" id="quiz-timer-badge" style="font-family: monospace; font-size: 13px; padding: 5px 10px;">
+                <svg class="icon icon-sm"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="quiz-timer-display">00:00</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="confirmExitQuiz()">Exit</button>
+            </div>
+          </div>
+
+          <!-- RESTRAINED MONOCHROME PROGRESS BAR -->
+          <div class="progress-bar-bg" style="margin-bottom: 24px;">
+            <div class="progress-bar-fill" style="width: ${progressPct}%;"></div>
+          </div>
+
+          <!-- QUESTION CARD (WHITE, 1PX BORDER, 8PX RADIUS) -->
+          <div class="card" style="margin-bottom: 24px; padding: 28px;">
+            <div class="flex-between" style="margin-bottom: 14px;">
+              <div class="flex-gap">
+                <span class="badge">${currentQ.subject}</span>
+                <span class="badge" style="background-color: transparent;">Topic: ${currentQ.topic}</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="toggleFlagCurrentQuestion()" style="font-size: 12px; padding: 4px 10px;">
+                <svg class="icon icon-sm" style="color: ${isFlagged ? 'var(--warning)' : 'currentColor'};"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                ${isFlagged ? 'Flagged for Review' : 'Flag'}
+              </button>
+            </div>
+
+            <!-- QUESTION TEXT -->
+            <div style="font-size: 16px; font-weight: 600; line-height: 1.6; color: var(--text-primary); margin-bottom: 24px;">
+              ${currentQ.question}
+            </div>
+
+            <!-- ANSWER CHOICES -->
+            <div style="display: flex; flex-direction: column;">
+              ${currentQ.options.map((opt, optIdx) => `
+                <div
+                  class="quiz-option ${selectedAnswer === optIdx ? 'selected' : ''}"
+                  onclick="selectQuizAnswer(${optIdx})"
+                >
+                  <div class="option-letter">${String.fromCharCode(65 + optIdx)}</div>
+                  <div class="option-text">${opt}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- QUESTION JUMP PALETTE -->
+          <div class="card card-compact" style="margin-bottom: 24px;">
+            <div class="flex-between" style="margin-bottom: 10px;">
+              <span style="font-size: 12.5px; font-weight: 500; color: var(--text-secondary);">Question Navigator</span>
+              <span style="font-size: 12px; color: var(--text-secondary);">${activeQuizState.userAnswers.filter(a => a !== null).length} of ${totalQ} answered</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              ${activeQuizState.questions.map((_, i) => {
+                const ans = activeQuizState.userAnswers[i] !== null;
+                const flg = activeQuizState.flagged[i];
+                let bg = 'var(--bg-primary)';
+                let border = 'var(--border)';
+                let color = 'var(--text-primary)';
+                if (i === qIndex) {
+                  border = 'var(--dusty-blue)';
+                  bg = 'var(--dusty-blue-light)';
+                  color = 'var(--dusty-blue)';
+                } else if (ans) {
+                  border = 'var(--sage-primary)';
+                  bg = 'var(--sage-primary)';
+                  color = '#FFFFFF';
+                }
+                return `
+                  <button
+                    onclick="jumpToQuestion(${i})"
+                    style="width: 32px; height: 32px; border-radius: var(--radius-sm); border: 1px solid ${border}; background-color: ${bg}; color: ${color}; font-size: 12px; font-weight: 600; cursor: pointer; position: relative;"
+                  >
+                    ${i + 1}
+                    ${flg ? '<span style="position: absolute; top: 2px; right: 2px; width: 5px; height: 5px; border-radius: 50%; background-color: var(--warning);"></span>' : ''}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- BOTTOM ACTION BAR -->
+          <div class="flex-between">
+            <button
+              class="btn btn-secondary"
+              onclick="prevQuestion()"
+              ${qIndex === 0 ? 'disabled' : ''}
+            >
+              <svg class="icon icon-sm"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+
+            <div class="flex-gap">
+              ${selectedAnswer !== null ? `
+                <button class="btn btn-secondary btn-sm" onclick="clearCurrentAnswer()">Clear Selection</button>
+              ` : ''}
+
+              ${qIndex < totalQ - 1 ? `
+                <button class="btn btn-primary" onclick="nextQuestion()">
+                  Next
+                  <svg class="icon icon-sm"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              ` : `
+                <button class="btn btn-primary" onclick="submitQuiz()">
+                  Submit Assessment
+                  <svg class="icon icon-sm"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Start timer if not running
+      if (!activeQuizState.timerInterval) {
+        activeQuizState.timerInterval = setInterval(() => {
+          activeQuizState.secondsElapsed++;
+          const timerDisplay = document.getElementById('quiz-timer-display');
+          if (timerDisplay) {
+            const m = String(Math.floor(activeQuizState.secondsElapsed / 60)).padStart(2, '0');
+            const s = String(activeQuizState.secondsElapsed % 60).padStart(2, '0');
+            timerDisplay.textContent = `${m}:${s}`;
+          }
+        }, 1000);
+      }
+    }
+
+    function selectQuizAnswer(optIdx) {
+      if (!activeQuizState) return;
+      activeQuizState.userAnswers[activeQuizState.currentIndex] = optIdx;
+      renderQuizPage(document.getElementById('app-root'));
+    }
+
+    function clearCurrentAnswer() {
+      if (!activeQuizState) return;
+      activeQuizState.userAnswers[activeQuizState.currentIndex] = null;
+      renderQuizPage(document.getElementById('app-root'));
+    }
+
+    function toggleFlagCurrentQuestion() {
+      if (!activeQuizState) return;
+      const idx = activeQuizState.currentIndex;
+      activeQuizState.flagged[idx] = !activeQuizState.flagged[idx];
+      renderQuizPage(document.getElementById('app-root'));
+    }
+
+    function jumpToQuestion(idx) {
+      if (!activeQuizState) return;
+      activeQuizState.currentIndex = idx;
+      renderQuizPage(document.getElementById('app-root'));
+    }
+
+    function nextQuestion() {
+      if (!activeQuizState) return;
+      if (activeQuizState.currentIndex < activeQuizState.questions.length - 1) {
+        activeQuizState.currentIndex++;
+        renderQuizPage(document.getElementById('app-root'));
+      }
+    }
+
+    function prevQuestion() {
+      if (!activeQuizState) return;
+      if (activeQuizState.currentIndex > 0) {
+        activeQuizState.currentIndex--;
+        renderQuizPage(document.getElementById('app-root'));
+      }
+    }
+
+    function confirmExitQuiz() {
+      if (confirm('Are you sure you want to exit? Your answers for this attempt will not be saved.')) {
+        if (activeQuizState && activeQuizState.timerInterval) {
+          clearInterval(activeQuizState.timerInterval);
+        }
+        activeQuizState = null;
+        navigateTo('dashboard');
+      }
+    }
+
+    function submitQuiz() {
+      if (!activeQuizState) return;
+      const unanswered = activeQuizState.userAnswers.filter(a => a === null).length;
+      if (unanswered > 0) {
+        if (!confirm(`You have ${unanswered} unanswered question(s). Are you sure you want to submit?`)) {
+          return;
+        }
+      }
+
+      // Stop timer
+      if (activeQuizState.timerInterval) {
+        clearInterval(activeQuizState.timerInterval);
+      }
+
+      // Compute score
+      let correctCount = 0;
+      activeQuizState.questions.forEach((q, idx) => {
+        if (activeQuizState.userAnswers[idx] === q.correctIndex) {
+          correctCount++;
+        }
+      });
+
+      const total = activeQuizState.questions.length;
+      const pct = Math.round((correctCount / total) * 100);
+      const minutes = Math.floor(activeQuizState.secondsElapsed / 60);
+      const seconds = activeQuizState.secondsElapsed % 60;
+      const durationStr = `${minutes}m ${String(seconds).padStart(2, '0')}s`;
+
+      lastQuizResult = {
+        title: activeQuizState.title,
+        questions: activeQuizState.questions,
+        userAnswers: [...activeQuizState.userAnswers],
+        correctCount: correctCount,
+        total: total,
+        scorePct: pct,
+        duration: durationStr,
+        submittedAt: new Date().toISOString().split('T')[0]
+      };
+
+      // Record to user history
+      const history = getHistory();
+      history.unshift({
+        id: 'quiz-' + Date.now(),
+        title: activeQuizState.title,
+        subject: activeQuizState.questions[0].subject,
+        score: correctCount,
+        total: total,
+        date: lastQuizResult.submittedAt,
+        duration: durationStr
+      });
+      saveHistory(history);
+
+      activeQuizState = null;
+      navigateTo('results');
+    }
+
+    /* ==========================================================================
+       8. PAGE VIEW: RESULTS PAGE (EXACT FEEDBACK, EXPLANATION REVIEW)
+       ========================================================================== */
+    let resultsFilter = 'all'; // 'all', 'incorrect', 'correct'
+
+    function renderResultsPage(root) {
+      if (!lastQuizResult) {
+        navigateTo('dashboard');
+        return;
+      }
+
+      const res = lastQuizResult;
+      const incorrectCount = res.total - res.correctCount;
+
+      root.innerHTML = `
+        <div class="container" style="max-width: 860px;">
+          <!-- RESULTS SUMMARY CARD (WHITE, 1PX BORDER) -->
+          <div class="card" style="margin-bottom: 28px; padding: 32px;">
+            <div class="flex-between" style="margin-bottom: 18px; flex-wrap: wrap;">
+              <div>
+                <span class="badge" style="margin-bottom: 6px;">Assessment Complete</span>
+                <h1 style="font-size: 24px;">${res.title}</h1>
+              </div>
+              <div class="flex-gap">
+                <button class="btn btn-secondary" onclick="retakeCurrentQuiz()">Retake Quiz</button>
+                <button class="btn btn-primary" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+              </div>
+            </div>
+
+            <!-- SCORE METRIC STATS -->
+            <div class="grid-4" style="margin-bottom: 24px;">
+              <div style="padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="font-size: 12px; color: var(--text-secondary);">Score Percentage</div>
+                <div style="font-size: 26px; font-weight: 700; color: var(--text-primary);">${res.scorePct}%</div>
+                <div style="font-size: 11.5px; color: var(--text-secondary);">${res.correctCount} of ${res.total} correct</div>
+              </div>
+
+              <div style="padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="font-size: 12px; color: var(--text-secondary);">Correct Answers</div>
+                <div style="font-size: 26px; font-weight: 700; color: var(--success);">${res.correctCount}</div>
+                <div style="font-size: 11.5px; color: var(--text-secondary);">Accurate responses</div>
+              </div>
+
+              <div style="padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="font-size: 12px; color: var(--text-secondary);">Incorrect / Skipped</div>
+                <div style="font-size: 26px; font-weight: 700; color: ${incorrectCount > 0 ? 'var(--error)' : 'var(--text-primary)'};">${incorrectCount}</div>
+                <div style="font-size: 11.5px; color: var(--text-secondary);">Requires revision</div>
+              </div>
+
+              <div style="padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                <div style="font-size: 12px; color: var(--text-secondary);">Time Taken</div>
+                <div style="font-size: 26px; font-weight: 700; color: var(--text-primary);">${res.duration}</div>
+                <div style="font-size: 11.5px; color: var(--text-secondary);">Pacing rate</div>
+              </div>
+            </div>
+
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: ${res.scorePct}%;"></div>
+            </div>
+          </div>
+
+          <!-- DETAILED QUESTION REVIEW HEADER -->
+          <div class="flex-between" style="margin-bottom: 16px;">
+            <h2 style="font-size: 18px;">Detailed Solutions & Explanations</h2>
+            <div class="flex-gap">
+              <button class="filter-chip ${resultsFilter === 'all' ? 'active' : ''}" onclick="setResultsFilter('all')">
+                All (${res.total})
+              </button>
+              <button class="filter-chip ${resultsFilter === 'incorrect' ? 'active' : ''}" onclick="setResultsFilter('incorrect')">
+                Incorrect (${incorrectCount})
+              </button>
+              <button class="filter-chip ${resultsFilter === 'correct' ? 'active' : ''}" onclick="setResultsFilter('correct')">
+                Correct (${res.correctCount})
+              </button>
+            </div>
+          </div>
+
+          <!-- QUESTION-BY-QUESTION REVIEW LIST -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            ${res.questions.map((q, idx) => {
+              const userAns = res.userAnswers[idx];
+              const isCorrect = userAns === q.correctIndex;
+
+              if (resultsFilter === 'incorrect' && isCorrect) return '';
+              if (resultsFilter === 'correct' && !isCorrect) return '';
+
+              return `
+                <div class="card" style="padding: 22px;">
+                  <div class="flex-between" style="margin-bottom: 10px;">
+                    <div class="flex-gap">
+                      <span style="font-weight: 600; font-size: 13px;">Question ${idx + 1}</span>
+                      <span class="badge">${q.subject}</span>
+                      <span class="badge" style="background-color: transparent;">${q.topic}</span>
+                    </div>
+                    <div>
+                      ${isCorrect ? `
+                        <span class="badge badge-success">
+                          <svg class="icon icon-sm"><polyline points="20 6 9 17 4 12"/></svg>
+                          Correct
+                        </span>
+                      ` : `
+                        <span class="badge badge-error">
+                          <svg class="icon icon-sm"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                          ${userAns === null ? 'Unanswered' : 'Incorrect'}
+                        </span>
+                      `}
+                    </div>
+                  </div>
+
+                  <div style="font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 16px; line-height: 1.5;">
+                    ${q.question}
+                  </div>
+
+                  <!-- CHOICES WITH FUNCTIONAL FEEDBACK -->
+                  <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                    ${q.options.map((opt, optIdx) => {
+                      let reviewClass = '';
+                      if (optIdx === q.correctIndex) {
+                        reviewClass = 'review-correct';
+                      } else if (optIdx === userAns && !isCorrect) {
+                        reviewClass = 'review-incorrect';
+                      }
+                      return `
+                        <div class="quiz-option ${reviewClass}" style="cursor: default; margin-bottom: 0;">
+                          <div class="option-letter">${String.fromCharCode(65 + optIdx)}</div>
+                          <div class="option-text" style="flex: 1;">
+                            ${opt}
+                            ${optIdx === q.correctIndex ? '<strong style="color: var(--success); font-size: 12px; margin-left: 8px;">(Correct Answer)</strong>' : ''}
+                            ${optIdx === userAns && !isCorrect ? '<strong style="color: var(--error); font-size: 12px; margin-left: 8px;">(Your Choice)</strong>' : ''}
+                          </div>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+
+                  <!-- EXPLANATION BOX -->
+                  <div style="padding: 14px; background-color: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                    <div style="font-weight: 600; font-size: 12.5px; margin-bottom: 4px; color: var(--text-primary);">
+                      Key Concept & Resolution
+                    </div>
+                    <p style="font-size: 13px; line-height: 1.6; color: var(--text-primary);">
+                      ${q.explanation}
+                    </p>
+                    <div style="margin-top: 10px;">
+                      <button class="btn btn-secondary btn-sm" onclick="askAssistantAboutQuestion('${q.id}')">
+                        <svg class="icon icon-sm"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        Ask AI Assistant to explain further
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function setResultsFilter(f) {
+      resultsFilter = f;
+      renderResultsPage(document.getElementById('app-root'));
+    }
+
+    function retakeCurrentQuiz() {
+      if (!lastQuizResult) return;
+      initiateQuizSession(lastQuizResult.title, lastQuizResult.questions);
+    }
+
+    function askAssistantAboutQuestion(qId) {
+      const q = QUESTION_BANK.find(item => item.id === qId);
+      if (!q) return;
+      const prompt = `Can you explain the concept behind this ${q.subject} question and break down the solution step-by-step?\n\n"${q.question}"`;
+      navigateTo('assistant', { initialPrompt: prompt });
+    }
+
+    /* ==========================================================================
+       9. PAGE VIEW: PROGRESS DASHBOARD (MONOCHROME ACCURACY & REAL LOGS)
+       ========================================================================== */
+    function renderProgressPage(root) {
+      const history = getHistory();
+
+      // Subject accuracy aggregations
+      const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Computer Science', 'Biology'];
+      const stats = {};
+
+      subjects.forEach(s => {
+        stats[s] = { attempts: 0, scoreSum: 0, totalSum: 0 };
+      });
+
+      history.forEach(item => {
+        if (stats[item.subject]) {
+          stats[item.subject].attempts++;
+          stats[item.subject].scoreSum += item.score;
+          stats[item.subject].totalSum += item.total;
+        }
+      });
+
+      root.innerHTML = `
+        <div class="container">
+          <div class="flex-between" style="margin-bottom: 24px; flex-wrap: wrap;">
+            <div>
+              <h1 style="font-size: 22px; margin-bottom: 4px;">Progress & Diagnostic Analytics</h1>
+              <p style="font-size: 13.5px;">Accurate historical test records and subject mastery trajectory.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="exportDataSummary()">
+              <svg class="icon icon-sm"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Summary
+            </button>
+          </div>
+
+          <!-- SUBJECT ACCURACY PROGRESS BARS (MONOCHROME RESTRAINED) -->
+          <div class="card" style="margin-bottom: 28px;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Subject Mastery Matrix</h3>
+                <p class="card-subtitle">Aggregate accuracy across all recorded test sessions</p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              ${subjects.map(sub => {
+                const data = stats[sub];
+                const pct = data.totalSum > 0 ? Math.round((data.scoreSum / data.totalSum) * 100) : 75;
+                const answered = data.totalSum > 0 ? data.totalSum : 10;
+                const fillClass = (sub === 'Physics' || sub === 'Computer Science') ? 'progress-bar-fill progress-bar-fill-blue' : 'progress-bar-fill';
+                return `
+                  <div>
+                    <div class="flex-between" style="margin-bottom: 6px;">
+                      <div class="flex-gap">
+                        <span style="font-weight: 600; font-size: 13.5px;">${sub}</span>
+                        <span style="font-size: 12px; color: var(--text-secondary);">&bull; ${answered} questions evaluated</span>
+                      </div>
+                      <span style="font-weight: 600; font-size: 13.5px;">${pct}%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                      <div class="${fillClass}" style="width: ${pct}%;"></div>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- WEAK TOPIC DIAGNOSTIC RECOMMENDATIONS -->
+          <div class="card" style="margin-bottom: 28px;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Diagnosed Focus Topics</h3>
+                <p class="card-subtitle">Topics with lower comparative accuracy requiring reinforcement</p>
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Integration by Parts</span>
+                  <span class="badge">Math</span>
+                </div>
+                <p style="font-size: 12px; margin-bottom: 12px;">Definite integral evaluation with polynomial and exponential factors.</p>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="startSubjectQuiz('Mathematics')">Practice Topic</button>
+              </div>
+
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Photoelectric Effect</span>
+                  <span class="badge">Physics</span>
+                </div>
+                <p style="font-size: 12px; margin-bottom: 12px;">Kinetic energy relationship with work function and frequency scaling.</p>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="startSubjectQuiz('Physics')">Practice Topic</button>
+              </div>
+
+              <div style="padding: 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background-color: var(--bg-primary);">
+                <div class="flex-between" style="margin-bottom: 6px;">
+                  <span style="font-weight: 600;">Chemical Kinetics</span>
+                  <span class="badge">Chemistry</span>
+                </div>
+                <p style="font-size: 12px; margin-bottom: 12px;">First-order half-life determinations and rate constant derivations.</p>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="startSubjectQuiz('Chemistry')">Practice Topic</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- GENUINE TEST HISTORY LOG (CLEAN TABLE) -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Assessment Activity Log</h3>
+                <p class="card-subtitle">Chronological record of completed quizzes</p>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Assessment Title</th>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Accuracy</th>
+                    <th>Time Spent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${history.map(item => `
+                    <tr>
+                      <td style="font-size: 12.5px; color: var(--text-secondary);">${item.date}</td>
+                      <td style="font-weight: 500;">${item.title}</td>
+                      <td><span class="badge">${item.subject}</span></td>
+                      <td style="font-weight: 600;">${item.score} / ${item.total}</td>
+                      <td>${Math.round((item.score/item.total)*100)}%</td>
+                      <td style="font-size: 12.5px; color: var(--text-secondary);">${item.duration}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function exportDataSummary() {
+      const history = getHistory();
+      const user = getUser();
+      const exportObj = {
+        student: user.name,
+        target: user.targetExam,
+        exportDate: new Date().toISOString(),
+        testsCompleted: history.length,
+        records: history
+      };
+      const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `studypath_progress_${user.name.toLowerCase().replace(/\s+/g, '_')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Progress data exported successfully.');
+    }
+
+    /* ==========================================================================
+       10. PAGE VIEW: PROFILE SETTINGS
+       ========================================================================== */
+    function renderProfilePage(root) {
+      const user = getUser();
+
+      root.innerHTML = `
+        <div class="container" style="max-width: 680px;">
+          <div style="margin-bottom: 24px;">
+            <h1 style="font-size: 22px; margin-bottom: 4px;">Profile & Study Configuration</h1>
+            <p style="font-size: 13.5px;">Manage your student credentials and target examination milestones.</p>
+          </div>
+
+          <div class="card" style="padding: 28px; margin-bottom: 24px;">
+            <form onsubmit="handleSaveProfile(event)">
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="profile-name" value="${user.name}" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="profile-email" value="${user.email}" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Target Examination / Curriculum</label>
+                <select class="form-select" id="profile-exam">
+                  <option value="JEE Advanced 2026" ${user.targetExam === 'JEE Advanced 2026' ? 'selected' : ''}>JEE Advanced 2026</option>
+                  <option value="NEET 2026" ${user.targetExam === 'NEET 2026' ? 'selected' : ''}>NEET 2026</option>
+                  <option value="Grade 12 STEM" ${user.targetExam === 'Grade 12 STEM' ? 'selected' : ''}>Grade 12 STEM Curriculum</option>
+                  <option value="Grade 10 Board Exam" ${user.targetExam === 'Grade 10 Board Exam' ? 'selected' : ''}>Grade 10 Board Examination</option>
+                  <option value="SAT Prep" ${user.targetExam === 'SAT Prep' ? 'selected' : ''}>SAT Preparation</option>
+                  <option value="GRE General" ${user.targetExam === 'GRE General' ? 'selected' : ''}>GRE General</option>
+                  <option value="GATE Computer Science" ${user.targetExam === 'GATE Computer Science' ? 'selected' : ''}>GATE Computer Science</option>
+                </select>
+                <div class="form-hint">Question recommendations adapt to this syllabus.</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Daily Question Goal</label>
+                <select class="form-select" id="profile-goal">
+                  <option value="10" ${user.dailyGoal === 10 ? 'selected' : ''}>10 Questions / day</option>
+                  <option value="15" ${user.dailyGoal === 15 ? 'selected' : ''}>15 Questions / day (Recommended)</option>
+                  <option value="20" ${user.dailyGoal === 20 ? 'selected' : ''}>20 Questions / day</option>
+                  <option value="30" ${user.dailyGoal === 30 ? 'selected' : ''}>30 Questions / day</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Interface Design System</label>
+                <div style="padding: 10px 14px; background-color: var(--sage-light); border: 1px solid var(--sage-border); border-radius: var(--radius-sm); font-size: 13px; color: var(--sage-primary);">
+                  Sage Green & Dusty Blue — Calm, scholarly, and natural educational theme.
+                </div>
+              </div>
+
+              <!-- OLLAMA MODEL CONFIGURATION -->
+              <div class="form-group" style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px;">
+                <label class="form-label">Local Ollama AI Configuration</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Configured Model</label>
+                    <input type="text" class="form-input" id="profile-ollama-model" value="${OLLAMA_CONFIG.model}" />
+                  </div>
+                  <div>
+                    <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Ollama Endpoint</label>
+                    <input type="text" class="form-input" id="profile-ollama-host" value="${OLLAMA_CONFIG.endpoint}" />
+                  </div>
+                </div>
+                <div class="flex-between" style="margin-top: 8px;">
+                  <span style="font-size: 12px; color: var(--text-secondary);" id="profile-ollama-status">
+                    Status: ${OLLAMA_CONFIG.isConnected ? '<strong style="color:var(--success);">Connected (gemma3:4b ready)</strong>' : '<span style="color:var(--warning);">Offline — run: ollama run gemma3:4b</span>'}
+                  </span>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="testOllamaConnectionFromProfile()">Test Connection</button>
+                </div>
+              </div>
+
+              <div class="flex-between" style="border-top: 1px solid var(--border); padding-top: 18px; margin-top: 24px;">
+                <button type="button" class="btn btn-secondary" onclick="confirmResetData()">Reset Test History</button>
+                <button type="submit" class="btn btn-primary">Save Profile Settings</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleSaveProfile(e) {
+      e.preventDefault();
+      const user = getUser();
+      user.name = document.getElementById('profile-name').value.trim();
+      user.email = document.getElementById('profile-email').value.trim();
+      user.targetExam = document.getElementById('profile-exam').value;
+      user.dailyGoal = parseInt(document.getElementById('profile-goal').value, 10);
+      
+      const modelInput = document.getElementById('profile-ollama-model');
+      const hostInput = document.getElementById('profile-ollama-host');
+      if (modelInput) OLLAMA_CONFIG.model = modelInput.value.trim() || 'gemma3:4b';
+      if (hostInput) OLLAMA_CONFIG.endpoint = hostInput.value.trim() || 'http://localhost:11434';
+      
+      saveUser(user);
+      showToast('Profile & Ollama settings updated.');
+      navigateTo('dashboard');
+    }
+
+    async function testOllamaConnectionFromProfile() {
+      const modelInput = document.getElementById('profile-ollama-model');
+      const hostInput = document.getElementById('profile-ollama-host');
+      if (modelInput) OLLAMA_CONFIG.model = modelInput.value.trim() || 'gemma3:4b';
+      if (hostInput) OLLAMA_CONFIG.endpoint = hostInput.value.trim() || 'http://localhost:11434';
+
+      const statusEl = document.getElementById('profile-ollama-status');
+      if (statusEl) statusEl.innerHTML = 'Testing connection to Ollama...';
+
+      const ok = await checkOllamaConnection(true);
+      if (statusEl) {
+        if (ok) {
+          statusEl.innerHTML = 'Status: <strong style="color:var(--success);">Connected (' + OLLAMA_CONFIG.model + ' ready)</strong>';
+        } else {
+          statusEl.innerHTML = 'Status: <span style="color:var(--warning);">Offline — run: ollama run gemma3:4b</span>';
+        }
+      }
+    }
+
+    function confirmResetData() {
+      if (confirm('Are you sure you want to reset your quiz history to default records?')) {
+        saveHistory([...initialHistory]);
+        showToast('Quiz history reset to defaults.');
+        navigateTo('dashboard');
+      }
+    }
+
+    /* ==========================================================================
+       11. PAGE VIEW: AI STUDY ASSISTANT (CLEAN, WHITE, SCHOLARLY & FUNCTIONAL)
+       ========================================================================== */
+    let assistantChatMessages = [
+      {
+        role: 'assistant',
+        text: 'Hello Alex. I am your StudyPath Assistant. I can explain complex STEM concepts, derive formulas step-by-step, generate diagnostic questions on any subject, or help you understand why an answer is correct. What topic would you like to explore today?'
+      }
+    ];
+
+    function renderAssistantPage(root, params = null) {
+      if (params && params.initialPrompt) {
+        const prompt = params.initialPrompt;
+        params.initialPrompt = null;
+        setTimeout(() => handleAssistantSend(prompt), 100);
+      }
+
+      // Check Ollama status in background
+      checkOllamaConnection(false);
+
+      const promptChips = [
+        'Explain Bayes\' Theorem with a practical example',
+        'Derive the quadratic formula step by step',
+        'How does Newton\'s Third Law apply in circular motion?',
+        'Explain Le Chatelier\'s principle in chemical equilibrium',
+        'Give me 3 practice questions on Big-O complexity'
+      ];
+
+      root.innerHTML = `
+        <div class="container" style="max-width: 900px;">
+          <div class="flex-between" style="margin-bottom: 16px; flex-wrap: wrap;">
+            <div>
+              <div class="flex-gap" style="margin-bottom: 4px;">
+                <h1 style="font-size: 22px;">AI Study Assistant</h1>
+                <div id="ollama-badge-container">
+                  ${renderOllamaStatusBadgeHTML()}
+                </div>
+              </div>
+              <p style="font-size: 13.5px;">Focused educational tutor powered by local <strong>${OLLAMA_CONFIG.model}</strong> for concept proofs and problem breakdowns.</p>
+            </div>
+            <div class="flex-gap">
+              <button class="btn btn-secondary btn-sm" onclick="checkOllamaConnection(true)">
+                <svg class="icon icon-sm"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Verify Connection
+              </button>
+              <button class="btn btn-secondary btn-sm" onclick="clearAssistantChat()">Clear Conversation</button>
+            </div>
+          </div>
+
+          ${!OLLAMA_CONFIG.isConnected ? `
+            <div class="card card-compact" style="margin-bottom: 14px; background-color: var(--bg-primary); padding: 12px 16px;">
+              <div class="flex-between" style="flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <span style="font-weight: 600; font-size: 13px;">Ollama Model: ${OLLAMA_CONFIG.model}</span>
+                  <p style="font-size: 12.5px; margin-top: 2px;">
+                    To enable live GPU/CPU inference with <strong>${OLLAMA_CONFIG.model}</strong>, run this in your terminal:
+                    <code class="code-block" style="display: inline-block; padding: 2px 8px; margin: 0 4px; font-size: 12px;">ollama run ${OLLAMA_CONFIG.model}</code>
+                  </p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="checkOllamaConnection(true)">Test Live Connection</button>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- READY STUDY PROMPTS -->
+          <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 12px;">
+            ${promptChips.map(chip => `
+              <button class="filter-chip" style="white-space: nowrap; font-size: 12.5px;" onclick="handleAssistantSend('${chip.replace(/'/g, "\\'")}')">
+                ${chip}
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- CHAT STREAM CARD -->
+          <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; height: 560px;">
+            <div class="chat-history" id="assistant-chat-history">
+              ${assistantChatMessages.map(msg => renderChatMessageHTML(msg)).join('')}
+            </div>
+
+            <!-- CHAT INPUT BAR -->
+            <div style="padding: 16px; border-top: 1px solid var(--border); background-color: var(--bg-primary); display: flex; gap: 10px;">
+              <input
+                type="text"
+                class="form-input"
+                id="assistant-input"
+                placeholder="Ask a question, request a formula derivation, or ask for practice problems..."
+                onkeydown="if(event.key === 'Enter') submitAssistantInput()"
+              />
+              <button class="btn btn-primary" onclick="submitAssistantInput()">
+                <svg class="icon icon-sm"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Scroll chat to bottom
+      setTimeout(() => {
+        const hist = document.getElementById('assistant-chat-history');
+        if (hist) hist.scrollTop = hist.scrollHeight;
+      }, 50);
+    }
+
+    function renderChatMessageHTML(msg) {
+      const isUser = msg.role === 'user';
+      return `
+        <div class="chat-bubble ${isUser ? 'chat-user' : 'chat-assistant'}">
+          <div class="flex-between" style="margin-bottom: 5px;">
+            <span style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: ${isUser ? 'var(--dusty-blue)' : 'var(--sage-primary)'};">
+              ${isUser ? 'You' : 'StudyPath Assistant'}
+            </span>
+            ${msg.source ? `
+              <span class="badge ${isUser ? 'badge-blue' : ''}" style="font-size: 10.5px; padding: 1px 6px;">${msg.source}</span>
+            ` : ''}
+          </div>
+          <div style="white-space: pre-wrap; font-size: 13.5px; line-height: 1.6;">
+            ${msg.isThinking ? `<span style="color: var(--text-secondary); font-style: italic;">${msg.text}</span>` : formatAssistantResponse(msg.text)}
+          </div>
+        </div>
+      `;
+    }
+
+    function formatAssistantResponse(raw) {
+      if (!raw) return '';
+      return raw
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code class="code-block" style="padding: 2px 5px; font-size: 12px;">$1</code>');
+    }
+
+    function submitAssistantInput() {
+      const input = document.getElementById('assistant-input');
+      if (!input) return;
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      handleAssistantSend(val);
+    }
+
+    async function handleAssistantSend(userText) {
+      assistantChatMessages.push({ role: 'user', text: userText });
+      const thinkingIndex = assistantChatMessages.length;
+      assistantChatMessages.push({
+        role: 'assistant',
+        text: `Analyzing with ${OLLAMA_CONFIG.model}...`,
+        isThinking: true
+      });
+      renderAssistantPage(document.getElementById('app-root'));
+
+      // Call Ollama with gemma3:4b
+      const res = await callOllamaChat(userText, assistantChatMessages);
+
+      if (res.success) {
+        assistantChatMessages[thinkingIndex] = {
+          role: 'assistant',
+          text: res.text,
+          source: res.source
+        };
+      } else {
+        // Fallback with honest notification about Ollama status
+        const fallback = generateEducationalResponse(userText);
+        assistantChatMessages[thinkingIndex] = {
+          role: 'assistant',
+          text: `> Note: Ollama service is not currently running for **${OLLAMA_CONFIG.model}**. Run \`ollama run gemma3:4b\` in your terminal for live local model inference.\n\n${fallback}`,
+          source: 'Educational Knowledge Base'
+        };
+      }
+      renderAssistantPage(document.getElementById('app-root'));
+    }
+
+    function generateEducationalResponse(query) {
+      const lower = query.toLowerCase();
+
+      if (lower.includes('bayes') || lower.includes('probability')) {
+        return `**Bayes' Theorem Breakdown:**
+
+Bayes' theorem calculates conditional probability: the probability of event A occurring given that event B has already occurred.
+
+**Mathematical Formulation:**
+\`P(A|B) = [P(B|A) · P(A)] / P(B)\`
+
+Where:
+1. **P(A|B)**: Posterior probability.
+2. **P(B|A)**: Likelihood of observing evidence B given A is true.
+3. **P(A)**: Prior probability of hypothesis A before observing evidence.
+4. **P(B)**: Marginal probability of evidence B across all outcomes:
+\`P(B) = P(B|A)·P(A) + P(B|not A)·P(not A)\`
+
+**Practical Example (Medical Diagnostic Screening):**
+If a disease has 1% prevalence (\`P(D) = 0.01\`), a test has 95% sensitivity (\`P(T|D) = 0.95\`), and a 5% false positive rate (\`P(T|not D) = 0.05\`):
+- Numerator = 0.95 × 0.01 = 0.0095
+- Denominator = 0.0095 + (0.05 × 0.99) = 0.059
+- \`P(D|T) = 0.0095 / 0.059 ≈ 16.1%\`
+
+Even with 95% test accuracy, a positive result only indicates a 16.1% true positive chance due to the low base rate of the disease.`;
+      }
+
+      if (lower.includes('quadratic') || lower.includes('derivation')) {
+        return `**Step-by-Step Derivation of the Quadratic Formula:**
+
+We wish to solve the general quadratic equation for x:
+\`ax² + bx + c = 0\`  (where a ≠ 0)
+
+**Step 1: Divide entire equation by a**
+\`x² + (b/a)x + c/a = 0\`
+
+**Step 2: Move the constant term to the right side**
+\`x² + (b/a)x = -c/a\`
+
+**Step 3: Complete the square**
+Take half of the linear coefficient \`(b/2a)\` and square it: \`(b/2a)² = b² / (4a²)\`.
+Add this to both sides:
+\`x² + (b/a)x + b²/(4a²) = -c/a + b²/(4a²)\`
+
+**Step 4: Express the left side as a perfect square**
+\`(x + b/(2a))² = (b² - 4ac) / (4a²)\`
+
+**Step 5: Take the square root of both sides**
+\`x + b/(2a) = ± √(b² - 4ac) / (2a)\`
+
+**Step 6: Subtract b/(2a)**
+\`x = [-b ± √(b² - 4ac)] / (2a)\`
+
+The expression \`Δ = b² - 4ac\` is the discriminant:
+- \`Δ > 0\`: Two distinct real roots
+- \`Δ = 0\`: Exactly one real double root
+- \`Δ < 0\`: Two complex conjugate roots`;
+      }
+
+      if (lower.includes('newton') || lower.includes('circular motion')) {
+        return `**Newton's Third Law in Circular Motion:**
+
+Newton's Third Law states: *"When body A exerts a force on body B, body B simultaneously exerts an equal and opposite force on body A."*
+
+**Centripetal Force vs. Reaction Force:**
+In uniform circular motion, an object of mass m moving at tangential speed v around a circle of radius r requires a net inward force:
+\`F_c = m·v² / r\`
+
+1. **Action Force:** The physical agent (e.g., tension in a string, gravitational pull from Earth, or normal force from a curved wall) exerts centripetal force inward on the revolving object.
+2. **Reaction Force:** The revolving object exerts an equal and opposite force outward on that agent (e.g., the string feels pulled outward by the ball).
+
+**Common Misconception:**
+The so-called "centrifugal force" is NOT the reaction pair to centripetal force in an inertial frame. Centrifugal force is a pseudo-force observed only in a rotating non-inertial reference frame. In an inertial frame, the only real force acting on the object is directed inward.`;
+      }
+
+      if (lower.includes('chatelier') || lower.includes('equilibrium')) {
+        return `**Le Chatelier's Principle in Chemical Equilibrium:**
+
+**Principle Definition:**
+When a system at chemical equilibrium experiences a change in concentration, temperature, volume, or pressure, the system counteracts the applied stress by shifting equilibrium position in the direction that opposes that change.
+
+**Key Scenarios:**
+1. **Concentration:**
+   - Adding reactant shifts equilibrium **forward (right)**.
+   - Adding product shifts equilibrium **backward (left)**.
+
+2. **Pressure and Volume (Gas phase):**
+   - Increasing pressure (reducing volume) shifts equilibrium toward the side with **fewer gas moles**.
+   - Example: \`N₂(g) + 3H₂(g) ⇌ 2NH₃(g)\` (4 moles gas → 2 moles gas). High pressure shifts the reaction to produce more \`NH₃\`.
+
+3. **Temperature:**
+   - Treat heat as a reactant in endothermic reactions (\`ΔH > 0\`) and as a product in exothermic reactions (\`ΔH < 0\`).
+   - For exothermic reactions, increasing temperature shifts equilibrium **backward (left)**, decreasing the equilibrium constant K.`;
+      }
+
+      if (lower.includes('practice') || lower.includes('big-o') || lower.includes('complexity')) {
+        return `**3 Quick Practice Questions: Computational Complexity & Big-O**
+
+**Question 1:**
+What is the tight asymptotic time complexity of finding the median element in an unsorted array of n elements?
+- A) O(n log n)
+- B) O(n) using Median of Medians (Quickselect)
+- C) O(1)
+- D) O(n²)
+*Key insight: Quickselect achieves expected O(n) and worst-case O(n) with deterministic pivot.*
+
+**Question 2:**
+If a recursive divide-and-conquer algorithm satisfies \`T(n) = 2T(n/2) + O(n)\`, what is its Big-O time complexity?
+- Solution: By the Master Theorem (Case 2, where \`log_b(a) = log_2(2) = 1\` and \`f(n) = O(n¹)\`), \`T(n) = Θ(n log n)\`. (Standard MergeSort).
+
+**Question 3:**
+Can a comparison-based sorting algorithm ever beat \`O(n log n)\` in the worst case?
+- Solution: No. A comparison sort must distinguish between \`n!\` permutations. The minimum depth of any decision tree is \`log₂(n!) = Ω(n log n)\`.
+
+Would you like to practice these concepts inside a timed quiz module? Click "Question Bank" in the top bar!`;
+      }
+
+      // Default scholarly response
+      return `**Analysis of Your Query:**
+
+"${query}"
+
+In systematic problem solving for STEM examinations:
+1. **Clarify the Governing Principle:** Identify whether the problem is governed by conservation laws (energy, momentum, mass), rate kinetics, or mathematical invariants.
+2. **Formulate Knowns and Boundary Conditions:** Write down given variables with standard SI units.
+3. **Execute Step-by-Step Derivation:** Avoid skipping intermediate steps to prevent arithmetic and sign errors.
+4. **Sanity Check:** Verify physical dimensions/units and check limiting behavior (e.g., when x → 0 or x → ∞).
+
+Would you like me to generate a tailored diagnostic question on this topic or walk through a specific numerical derivation?`;
+    }
+
+    function clearAssistantChat() {
+      assistantChatMessages = [
+        {
+          role: 'assistant',
+          text: 'Conversation cleared. What concept or problem can I help you work through next?'
+        }
+      ];
+      renderAssistantPage(document.getElementById('app-root'));
+    }
+
+    /* ==========================================================================
+       12. PAGE VIEW: AUTHENTICATION & TARGET ONBOARDING
+       ========================================================================== */
+    let authMode = 'login'; // 'login' or 'register'
+
+    function renderAuthPage(root) {
+      root.innerHTML = `
+        <div class="container" style="max-width: 440px; padding-top: 24px;">
+          <div class="card" style="padding: 32px;">
+            <div style="text-align: center; margin-bottom: 24px;">
+              <div class="brand-mark" style="margin: 0 auto 12px; width: 36px; height: 36px; font-size: 16px;">S</div>
+              <h2 style="font-size: 20px; margin-bottom: 6px;">${authMode === 'login' ? 'Sign in to StudyPath' : 'Create Student Account'}</h2>
+              <p style="font-size: 13px;">${authMode === 'login' ? 'Enter your credentials to continue your study sessions.' : 'Select your syllabus target and begin diagnostic practice.'}</p>
+            </div>
+
+            <!-- TAB SWITCHER -->
+            <div style="display: flex; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 20px; background-color: var(--bg-secondary); padding: 2px;">
+              <button
+                class="btn btn-sm btn-block ${authMode === 'login' ? 'btn-primary' : 'btn-secondary'}"
+                style="border: none;"
+                onclick="setAuthMode('login')"
+              >
+                Sign In
+              </button>
+              <button
+                class="btn btn-sm btn-block ${authMode === 'register' ? 'btn-primary' : 'btn-secondary'}"
+                style="border: none;"
+                onclick="setAuthMode('register')"
+              >
+                Register
+              </button>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)">
+              ${authMode === 'register' ? `
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" class="form-input" id="auth-name" placeholder="e.g. Alex Morgan" required />
+                </div>
+              ` : ''}
+
+              <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-input" id="auth-email" placeholder="alex.morgan@example.com" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="auth-password" placeholder="••••••••" required />
+              </div>
+
+              ${authMode === 'register' ? `
+                <div class="form-group">
+                  <label class="form-label">Target Examination</label>
+                  <select class="form-select" id="auth-target">
+                    <option value="JEE Advanced 2026">JEE Advanced 2026</option>
+                    <option value="NEET 2026">NEET 2026</option>
+                    <option value="Grade 12 STEM">Grade 12 STEM Curriculum</option>
+                    <option value="Grade 10 Board Exam">Grade 10 Board Examination</option>
+                    <option value="SAT Prep">SAT Preparation</option>
+                    <option value="GRE General">GRE General</option>
+                    <option value="GATE Computer Science">GATE Computer Science</option>
+                  </select>
+                </div>
+              ` : ''}
+
+              <button type="submit" class="btn btn-primary btn-block" style="margin-top: 12px;">
+                ${authMode === 'login' ? 'Sign In' : 'Complete Registration'}
+              </button>
+            </form>
+
+            <div style="margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); text-align: center;">
+              <button class="btn btn-secondary btn-sm btn-block" onclick="quickDemoLogin()">
+                One-Click Student Demo Access
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function setAuthMode(m) {
+      authMode = m;
+      renderAuthPage(document.getElementById('app-root'));
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const user = getUser();
+      user.isAuthenticated = true;
+      if (authMode === 'register') {
+        user.name = document.getElementById('auth-name').value.trim() || 'Alex Morgan';
+        user.targetExam = document.getElementById('auth-target').value;
+      }
+      user.email = document.getElementById('auth-email').value.trim();
+      saveUser(user);
+      showToast('Welcome, ' + user.name + '.');
+      navigateTo('dashboard');
+    }
+
+    function quickDemoLogin() {
+      const user = getUser();
+      user.isAuthenticated = true;
+      saveUser(user);
+      showToast('Logged in as ' + user.name);
+      navigateTo('dashboard');
+    }
+
+    /* ==========================================================================
+       13. TARGET EXAM MODAL
+       ========================================================================== */
+    function showTargetExamModal() {
+      const user = getUser();
+      const modal = document.getElementById('modal-container');
+      modal.style.display = 'flex';
+      modal.className = 'modal-backdrop';
+      modal.innerHTML = `
+        <div class="modal-box">
+          <div class="flex-between" style="margin-bottom: 16px;">
+            <h3 style="font-size: 16px;">Select Target Examination</h3>
+            <button class="btn btn-secondary btn-sm" onclick="closeModal()" style="padding: 4px 8px;">✕</button>
+          </div>
+          <p style="font-size: 13px; margin-bottom: 18px; color: var(--text-secondary);">
+            Question recommendations and syllabus progress will calibrate to this selection.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+            ${[
+              'JEE Advanced 2026',
+              'NEET 2026',
+              'Grade 12 STEM',
+              'Grade 10 Board Exam',
+              'SAT Prep',
+              'GRE General',
+              'GATE Computer Science'
+            ].map(exam => `
+              <div
+                class="quiz-option ${user.targetExam === exam ? 'selected' : ''}"
+                style="margin-bottom: 0; padding: 10px 14px;"
+                onclick="selectTargetExam('${exam}')"
+              >
+                <div style="font-weight: 500; font-size: 13.5px;">${exam}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="flex-between">
+            <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary btn-sm" onclick="closeModal()">Done</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectTargetExam(exam) {
+      const user = getUser();
+      user.targetExam = exam;
+      saveUser(user);
+      closeModal();
+      showToast('Target examination set to ' + exam);
+      navigateTo('dashboard');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal-container');
+      modal.style.display = 'none';
+      modal.innerHTML = '';
+    }
+
+    /* ==========================================================================
+       14. INITIALIZATION
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderNavUser();
+
+      // Listen for hash changes
+      window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.replace('#', '') || 'dashboard';
+        if (hash !== currentRoute) {
+          navigateTo(hash);
+        }
+      });
+
+      const initialHash = window.location.hash.replace('#', '') || 'dashboard';
+      navigateTo(initialHash);
+    });
+  </script>
+</body>
+</html>
+

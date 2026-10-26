@@ -1,0 +1,11 @@
+{
+  "name": "studypath",
+  "version": "1.0.0",
+  "description": "StudyPath - Premium Minimalist Educational Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "StudyPath Team",
+  "license": "MIT"
+}
